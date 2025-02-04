@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 輸出</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #jsonOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>生成的 JSON 文檔</h1>
+<button id="copyButton">一鍵複製</button>
+<button id="editButton">返回編輯</button>
+<div id="jsonOutput"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jsonOutput = localStorage.getItem('jsonOutput');
+        document.getElementById('jsonOutput').textContent = jsonOutput || '沒有可顯示的 JSON 數據。';
+        
+        document.getElementById('copyButton').addEventListener('click', function() {
+            navigator.clipboard.writeText(jsonOutput).then(() => {
+                alert('已複製到剪貼板！');
+            });
+        });
+
+        document.getElementById('editButton').addEventListener('click', function() {
+            window.location.href = 'index.html'; // 返回到編輯頁面
+        });
+    });
+</script>
+
+</body>
+</html>
