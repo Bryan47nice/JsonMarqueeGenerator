@@ -52,4 +52,3 @@
 ## 原始規劃文件
 
 https://www.figma.com/design/FGWHQZrfmlPmoVtoNI9CUZ/%E4%BD%9C%E8%80%85%E5%85%AC%E7%89%88%E5%8A%9F%E8%83%BD-%E6%96%87%E4%BB%B6?node-id=27420-3903&t=C9lXRnmzBAAqqC1v-4
-https://www.figma.com/design/FGWHQZrfmlPmoVtoNI9CUZ/%E4%BD%9C%E8%80%85%E5%85%AC%E7%89%88%E5%8A%9F%E8%83%BD-%E6%96%87%E4%BB%B6?node-id=27420-3903&t=C9lXRnmzBAAqqC1v-4
