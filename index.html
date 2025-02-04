@@ -62,6 +62,7 @@
 <h1>創建跑馬燈的json吧！</h1>
 <form id="userForm">
     <div id="conditionsContainer"></div>
+    <button type="button" id="addConditionButton">新增條件</button>
     <button type="button" id="clearButton">清除設定</button>
     <button type="submit">提交</button>
 </form>
@@ -107,7 +108,6 @@
             <input type="url" id="url${index}" placeholder="請輸入完整的 URL" value="${url}">
 
             <button type="button" onclick="removeCondition(this)">刪除條件</button>
-            <button type="button" onclick="createCondition()">新增條件</button>
         `;
 
         conditionsContainer.appendChild(conditionDiv);
@@ -135,6 +135,14 @@
             conditions[i].querySelector('h3').textContent = `條件 ${i + 1}`;
         }
     }
+
+    document.getElementById('addConditionButton').addEventListener('click', () => {
+        createCondition(); // 新增條件
+    });
+
+    document.getElementById('clearButton').addEventListener('click', () => {
+        conditionsContainer.innerHTML = ''; // 清除所有條件
+    });
 
     document.getElementById('userForm').addEventListener('submit', function(event) {
         event.preventDefault();
