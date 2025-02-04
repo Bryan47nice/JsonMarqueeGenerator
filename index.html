@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創建跑馬燈的json吧！</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        input, select, textarea {
+            width: calc(100% - 40px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .condition {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #jsonOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>創建跑馬燈的json吧！</h1>
+<form id="userForm">
+    <div id="conditionsContainer"></div>
+    <button type="button" id="clearButton">清除設定</button>
+    <button type="submit">提交</button>
+</form>
+
+<script>
+    const conditionsContainer = document.getElementById('conditionsContainer');
+
+    function createCondition(userType = '', text = '', color = '0', startTime = '', endTime = '', url = '', index = conditionsContainer.children.length + 1) {
+        const conditionDiv = document.createElement('div');
+        conditionDiv.className = 'condition';
+        
+        conditionDiv.innerHTML = `
+            <h3>條件 ${index}</h3>
+            <label class="required" for="userType${index}">用戶類型：</label>
+            <select id="userType${index}" required>
+                <option value="">請選擇</option>
+                <option value="0" ${userType === '0' ? 'selected' : ''}>全部用戶</option>
+                <option value="1" ${userType === '1' ? 'selected' : ''}>專業版用戶</option>
+                <option value="2" ${userType === '2' ? 'selected' : ''}>免費版用戶</option>
+            </select>
+
+            <label class="required" for="text${index}">文本內容：</label>
+            <textarea id="text${index}" rows="2" required>${text}</textarea>
+
+            <label for="color${index}">顏色 (預設白)：</label>
+            <select id="color${index}">
+                <option value="0" ${color === '0' ? 'selected' : ''}>白</option>
+                <option value="1" ${color === '1' ? 'selected' : ''}>黑</option>
+                <option value="2" ${color === '2' ? 'selected' : ''}>橘</option>
+                <option value="3" ${color === '3' ? 'selected' : ''}>紅</option>
+                <option value="4" ${color === '4' ? 'selected' : ''}>綠</option>
+                <option value="5" ${color === '5' ? 'selected' : ''}>藍</option>
+                <option value="6" ${color === '6' ? 'selected' : ''}>紫</option>
+            </select>
+
+            <label for="startTime${index}">開始時間：</label>
+            <input type="text" id="startTime${index}" placeholder="YYYY/MM/DD HH:MM" value="${startTime}">
+
+            <label for="endTime${index}">結束時間：</label>
+            <input type="text" id="endTime${index}" placeholder="YYYY/MM/DD HH:MM" value="${endTime}">
+
+            <label for="url${index}">URL：</label>
+            <input type="url" id="url${index}" placeholder="請輸入完整的 URL" value="${url}">
+
+            <button type="button" onclick="removeCondition(this)">刪除條件</button>
+            <button type="button" onclick="createCondition()">新增條件</button>
+        `;
+
+        conditionsContainer.appendChild(conditionDiv);
+
+        // 初始化 Flatpickr
+        flatpickr(`#startTime${index}`, {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+        flatpickr(`#endTime${index}`, {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+    }
+
+    function removeCondition(button) {
+        const conditionDiv = button.parentElement;
+        conditionsContainer.removeChild(conditionDiv);
+        updateConditionNumbers();
+    }
+
+    function updateConditionNumbers() {
+        const conditions = conditionsContainer.children;
+        for (let i = 0; i < conditions.length; i++) {
+            conditions[i].querySelector('h3').textContent = `條件 ${i + 1}`;
+        }
+    }
+
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const conditions = Array.from(conditionsContainer.children).map((condition, index) => {
+            const userType = condition.querySelector(`#userType${index + 1}`).value;
+            const text = condition.querySelector(`#text${index + 1}`).value;
+            const color = condition.querySelector(`#color${index + 1}`).value;
+            const startTime = condition.querySelector(`#startTime${index + 1}`).value;
+            const endTime = condition.querySelector(`#endTime${index + 1}`).value;
+            const url = condition.querySelector(`#url${index + 1}`).value; // URL不再是必填
+
+            // 檢查必填欄位
+            if (!userType || !text) {
+                alert('有尚未填寫的欄位唷~請填完之後再按一次提交');
+                return;
+            }
+
+            return {
+                userType: userType,
+                text: text,
+                color: color, // 使用數字
+                startTime: startTime,
+                endTime: endTime,
+                url: url // URL不再是必填
+            };
+        });
+
+        const jsonOutput = JSON.stringify(conditions, null, 2);
+        localStorage.setItem('jsonOutput', jsonOutput);
+        window.location.href = 'output.html';
+    });
+
+    // 加載保存的資料
+    const savedConditions = JSON.parse(localStorage.getItem('jsonOutput'));
+    if (savedConditions) {
+        savedConditions.forEach((condition) => createCondition(condition.userType, condition.text, condition.color, condition.startTime, condition.endTime, condition.url));
+    } else {
+        createCondition(); // 初始條件
+    }
+</script>
+
+</body>
+</html>
