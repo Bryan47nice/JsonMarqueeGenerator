@@ -55,6 +55,9 @@
             white-space: pre-wrap;
             background-color: #f9f9f9;
         }
+        .error {
+            border: 2px solid pink;
+        }
     </style>
 </head>
 <body>
@@ -147,18 +150,36 @@
     document.getElementById('userForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
+        let hasError = false; // 追蹤是否有錯誤
+
         const conditions = Array.from(conditionsContainer.children).map((condition, index) => {
             const userType = condition.querySelector(`#userType${index + 1}`).value;
             const text = condition.querySelector(`#text${index + 1}`).value;
             const color = condition.querySelector(`#color${index + 1}`).value;
             const startTime = condition.querySelector(`#startTime${index + 1}`).value;
-            const endTime = condition.querySelector(`#endTime${index + 1}`).value;
+            const endTime = condition.querySelector(`#endTime${index + 1}`).value; 
             const url = condition.querySelector(`#url${index + 1}`).value; // URL不再是必填
 
             // 檢查必填欄位
             if (!userType || !text) {
                 alert('有尚未填寫的欄位唷~請填完之後再按一次提交');
-                return;
+                hasError = true;
+                return null;
+            }
+
+            // 檢查時間邏輯
+            const startDate = new Date(startTime);
+            const endDate = new Date(endTime);
+            if (startDate >= endDate) {
+                alert('發現開始時間晚於結束時間，請調整唷！');
+                condition.querySelector(`#startTime${index + 1}`).classList.add('error');
+                condition.querySelector(`#endTime${index + 1}`).classList.add('error');
+                hasError = true;
+                return null;
+            } else {
+                // 移除錯誤樣式
+                condition.querySelector(`#startTime${index + 1}`).classList.remove('error');
+                condition.querySelector(`#endTime${index + 1}`).classList.remove('error');
             }
 
             return {
@@ -170,6 +191,8 @@
                 url: url // URL不再是必填
             };
         });
+
+        if (hasError) return; // 如果有錯誤，停止提交
 
         const jsonOutput = JSON.stringify(conditions, null, 2);
         localStorage.setItem('jsonOutput', jsonOutput);
