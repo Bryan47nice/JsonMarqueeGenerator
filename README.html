@@ -1,50 +1,132 @@
-# 創建跑馬燈的 JSON 工具
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>操作文件：創建跑馬燈的 JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 20px;
+            margin-top: 15px;
+        }
+        p, ul {
+            line-height: 1.6;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
 
-這是一個簡單的網頁應用程式，允許用戶創建跑馬燈的 JSON 配置。用戶可以添加條件、設定顏色、時間和 URL，並生成相應的 JSON 輸出。
+<h1>操作文件：創建跑馬燈的 JSON</h1>
 
-## 功能
+<h2>目錄</h2>
+<ul>
+    <li><a href="#簡介">簡介</a></li>
+    <li><a href="#使用步驟">使用步驟</a>
+        <ul>
+            <li><a href="#1-介面介紹">1. 介面介紹</a></li>
+            <li><a href="#2-創建條件">2. 創建條件</a></li>
+            <li><a href="#3-提交設定">3. 提交設定</a></li>
+            <li><a href="#4-清除設定">4. 清除設定</a></li>
+            <li><a href="#5-複製-json">5. 複製 JSON</a></li>
+        </ul>
+    </li>
+    <li><a href="#常見問題">常見問題</a></li>
+</ul>
 
-- **新增條件**：用戶可以添加多個條件，每個條件可以設定用戶類型、文本內容、顏色、開始時間、結束時間及 URL。
-- **時間檢查**：當用戶設定的開始時間晚於結束時間時，將顯示提醒並標記錯誤的輸入框。
-- **清除設定**：用戶可以清除所有已設定的條件。
-- **提交功能**：用戶可以提交表單，生成 JSON 輸出並保存至本地儲存。
+<h2 id="簡介">簡介</h2>
+<p>此應用程式可用於創建跑馬燈的 JSON 設定，使用者可以透過簡單的表單來設定不同的條件，並生成相應的 JSON 格式。</p>
 
-## 使用說明
+<h2 id="使用步驟">使用步驟</h2>
 
-1. **新增條件**：
-   - 點擊「新增條件」按鈕，填寫用戶類型、文本內容、顏色、開始時間、結束時間及 URL。
-   - 點擊「刪除條件」按鈕可以移除不需要的條件。
+<h3 id="1-介面介紹">1. 介面介紹</h3>
+<ul>
+    <li><strong>左側面板</strong>：用於填寫跑馬燈的設定條件。</li>
+    <li><strong>右側面板</strong>：顯示生成的 JSON 輸出。</li>
+    <li><strong>主題切換</strong>：可切換淺色模式和深色模式。</li>
+</ul>
 
-2. **時間設定**：
-   - 開始時間和結束時間必須以 `YYYY/MM/DD HH:MM` 格式輸入。
-   - 若開始時間晚於結束時間，將顯示提醒並將相關輸入框標記為錯誤。
+<h3 id="2-創建條件">2. 創建條件</h3>
+<ol>
+    <li>在左側面板中，您可以看到一個標題為「創建跑馬燈的 JSON 啦！」的區域。</li>
+    <li>點擊「向上新增」或「向下新增」按鈕來添加新的條件。</li>
+    <li>每個條件包含以下欄位：
+        <ul>
+            <li><strong>用戶類型</strong>：選擇用戶的類型（全部用戶、專業版用戶、免費版用戶）。</li>
+            <li><strong>文本內容</strong>：輸入顯示的文本。</li>
+            <li><strong>顏色</strong>：選擇文本顏色。</li>
+            <li><strong>開始時間</strong>：設置跑馬燈開始的時間。</li>
+            <li><strong>結束時間</strong>：設置跑馬燈結束的時間。</li>
+            <li><strong>URL</strong>：可選擇性填寫，若填寫則具備跳轉功能。</li>
+        </ul>
+    </li>
+</ol>
 
-3. **清除設定**：
-   - 點擊「清除設定」按鈕可清除所有條件設定。
+<h3 id="3-提交設定">3. 提交設定</h3>
+<ol>
+    <li>填寫完所有條件後，點擊「提交」按鈕。</li>
+    <li>如果有錯誤（例如開始時間晚於結束時間），將會顯示錯誤提示，並標記相關欄位。</li>
+</ol>
 
-4. **提交表單**：
-   - 點擊「提交」按鈕生成 JSON 輸出，並轉到輸出頁面。
+<h3 id="4-清除設定">4. 清除設定</h3>
+<ol>
+    <li>點擊「清除設定」按鈕，所有已填寫的欄位將被清空，包含開始時間和結束時間。</li>
+</ol>
 
-## 技術架構
+<h3 id="5-複製-json">5. 複製 JSON</h3>
+<ol>
+    <li>在右側面板中，生成的 JSON 將顯示在「領取你的跑馬燈」區域。</li>
+    <li>點擊「一鍵複製」按鈕，將生成的 JSON 複製到剪貼簿。</li>
+</ol>
 
-- **HTML/CSS**：用於網頁結構和樣式設計。
-- **JavaScript**：用於處理用戶互動和數據邏輯。
-- **Flatpickr**：用於日期時間選擇的輔助工具。
+<h2 id="常見問題">常見問題</h2>
+<ul>
+    <li><strong>如何切換主題？</strong>
+        點擊「深色模式」的開關即可切換淺色模式和深色模式。
+    </li>
+    <li><strong>為什麼我無法提交設定？</strong>
+        請檢查所有必填欄位是否已填寫正確，尤其是時間設定。
+    </li>
+    <li><strong>清除設定後資料是否會恢復？</strong>
+        清除設定後，所有資料將無法恢復，請謹慎操作。
+    </li>
+</ul>
 
-## 安裝與運行
+<div class="footer">
+    <p>這份操作文件提供了完整的使用說明，幫助用戶快速上手應用程式。如有其他問題，請隨時聯繫我們的技術支持。</p>
+    <p>1. 若使用上有問題可連繫仕祺47</p>
+    <p>2. 原始文件連結可點 <a href="https://reurl.cc/nqAR1n" target="_blank">這裡</a></p>
+</div>
 
-1. 將此專案下載到本地。
-2. 使用瀏覽器打開 `index.html` 文件。
-
-## 注意事項
-
-- 確保使用現代瀏覽器以獲得最佳體驗。
-- 本應用程式支持的 JSON 格式僅限於本工具內部使用，請根據需求進行調整。
-
-## 貢獻
-
-歡迎任何形式的貢獻！如有建議或問題，請提交 issue 或 pull request。
-
-## 授權
-
-本專案採用 MIT 授權，詳情請參閱 LICENSE 文件。
+</body>
+</html>
