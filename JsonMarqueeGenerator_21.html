@@ -430,10 +430,25 @@
 
         document.getElementById('clearButton').addEventListener('click', function() {
             Array.from(conditionsContainer.children).forEach(condition => {
-                condition.querySelector('textarea').value = '';
-                condition.querySelector('input[type="text"]').value = '';
-                condition.querySelector('input[type="url"]').value = ''; // 清除 URL
-                condition.querySelector('select').selectedIndex = 0; // 重置選擇
+                // 清除所有 <textarea>
+                condition.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.value = '';
+                });
+
+                // 清除所有 input[type="text"]
+                condition.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.value = '';
+                });
+
+                // 清除所有 input[type="url"]
+                condition.querySelectorAll('input[type="url"]').forEach(input => {
+                    input.value = '';
+                });
+
+                // 重置所有 <select>
+                condition.querySelectorAll('select').forEach(select => {
+                    select.selectedIndex = 0;
+                });
             });
         });
 
