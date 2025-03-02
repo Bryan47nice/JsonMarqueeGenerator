@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,13 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         :root {
-            --bg-primary: #1a1a1a; /* 預設深色模式 */
+            --bg-primary: #1a1a1a;
+            /* 預設深色模式 */
             --bg-secondary: #2d2d2d;
             --bg-tertiary: #363636;
             --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0; /* 深一點的顏色 */
+            --text-secondary: #b0b0b0;
+            /* 深一點的顏色 */
             --border-color: #404040;
             --accent-color: #3498db;
             --accent-hover: #2980b9;
@@ -26,7 +29,8 @@
             --bg-secondary: #f9f9f9;
             --bg-tertiary: #e7e7e7;
             --text-primary: #000000;
-            --text-secondary: #555555; /* 深一點的顏色 */
+            --text-secondary: #555555;
+            /* 深一點的顏色 */
             --border-color: #ccc;
             --accent-color: #28a745;
             --accent-hover: #218838;
@@ -50,7 +54,8 @@
             height: 100vh;
         }
 
-        .left-panel, .right-panel {
+        .left-panel,
+        .right-panel {
             flex: 1;
             padding: 20px;
             border-right: 1px solid var(--border-color);
@@ -95,19 +100,24 @@
             color: var(--error-color);
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: calc(100% - 40px);
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: var(--bg-secondary); /* 所有輸入框背景設為次要顏色 */
+            background-color: var(--bg-secondary);
+            /* 所有輸入框背景設為次要顏色 */
             color: var(--text-primary);
         }
 
         input[type="url"] {
-            background-color: var(--bg-secondary); /* URL 輸入框保持深色 */
-            color: var(--text-secondary); /* 內容顏色為淺色 */
+            background-color: var(--bg-secondary);
+            /* URL 輸入框保持深色 */
+            color: var(--text-secondary);
+            /* 內容顏色為淺色 */
         }
 
         button {
@@ -181,11 +191,11 @@
             transition: transform 0.3s;
         }
 
-        input:checked + .switch {
+        input:checked+.switch {
             background-color: var(--accent-color);
         }
 
-        input:checked + .switch::before {
+        input:checked+.switch::before {
             transform: translateX(20px);
         }
 
@@ -204,7 +214,7 @@
             background-color: var(--accent-hover);
         }
 
-        .modal, .modal-overlay {
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -212,6 +222,29 @@
             width: 100%;
             height: 100%;
             z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+
+            /* 添加以下用於置中的屬性 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            height: auto;
+            margin: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
         }
 
         .modal {
@@ -244,6 +277,7 @@
         }
     </style>
 </head>
+
 <body data-theme="dark"> <!-- 預設為深色模式 -->
     <div class="container">
         <!-- 左側表單區域 -->
@@ -259,7 +293,8 @@
                 </div>
             </div>
             <p class="sub-header">
-                <a href="https://bryan47nice.github.io/JsonMarqueeGenerator/JsonMarqueeGeneratorInstruction.html" target="_blank">查看文件</a> | 若操作上有遇到問題請聯繫仕祺
+                <a href="https://bryan47nice.github.io/JsonMarqueeGenerator/JsonMarqueeGeneratorInstruction.html"
+                    target="_blank">查看文件</a> | 若操作上有遇到問題請聯繫仕祺
             </p>
             <form id="userForm">
                 <div id="conditionsContainer"></div>
@@ -270,7 +305,8 @@
 
         <!-- 右側輸出區域 -->
         <div class="right-panel">
-            <h2 style="background-color: var(--bg-secondary); color: var(--text-primary); padding: 10px; border-radius: 5px;">
+            <h2
+                style="background-color: var(--bg-secondary); color: var(--text-primary); padding: 10px; border-radius: 5px;">
                 領取你的跑馬燈
                 <button class="copy-button" id="copyButton">一鍵複製</button>
             </h2>
@@ -348,13 +384,44 @@
 
             conditionsContainer.appendChild(conditionDiv);
 
-            flatpickr(`#startTime${index}`, { enableTime: true, dateFormat: "Y/m/d H:i" });
-            flatpickr(`#endTime${index}`, { enableTime: true, dateFormat: "Y/m/d H:i" });
+            const startPicker = flatpickr(`#startTime${index}`, {
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                onChange: function (selectedDates, dateStr) {
+                    checkTimesForCondition(index);
+                }
+            });
+
+            const endPicker = flatpickr(`#endTime${index}`, {
+                enableTime: true,
+                dateFormat: "Y/m/d H:i",
+                onChange: function (selectedDates, dateStr) {
+                    checkTimesForCondition(index);
+                }
+            });
         }
 
+        function checkTimesForCondition(index) {
+            const startTimeInput = document.querySelector(`#startTime${index}`);
+            const endTimeInput = document.querySelector(`#endTime${index}`);
+
+            if (startTimeInput.value && endTimeInput.value) {
+                const startTime = new Date(startTimeInput.value);
+                const endTime = new Date(endTimeInput.value);
+
+                if (startTime > endTime) {
+                    startTimeInput.classList.add('error');
+                    endTimeInput.classList.add('error');
+                    timeErrorModal.style.display = 'flex'; // 使用 flex 而不是 block
+                } else {
+                    startTimeInput.classList.remove('error');
+                    endTimeInput.classList.remove('error');
+                }
+            }
+        }
         function removeCondition(button) {
             if (conditionsContainer.children.length <= 1) {
-                deleteWarningModal.style.display = 'block';
+                deleteWarningModal.style.display = 'flex';
             } else {
                 const conditionDiv = button.parentElement;
                 conditionsContainer.removeChild(conditionDiv);
@@ -385,35 +452,51 @@
             }
         }
 
-        document.getElementById('userForm').addEventListener('submit', function(event) {
+        document.getElementById('userForm').addEventListener('submit', function (event) {
             event.preventDefault();
             let isValid = true;
 
             const conditions = Array.from(conditionsContainer.children).map((condition, index) => {
-                const userType = condition.querySelector(`#userType${index + 1}`).value;
-                const text = condition.querySelector(`#text${index + 1}`).value;
-                const color = condition.querySelector(`#color${index + 1}`).value;
+                const userTypeElement = condition.querySelector(`#userType${index + 1}`);
+                const textElement = condition.querySelector(`#text${index + 1}`);
+                const colorElement = condition.querySelector(`#color${index + 1}`);
                 const startTimeInput = condition.querySelector(`#startTime${index + 1}`);
                 const endTimeInput = condition.querySelector(`#endTime${index + 1}`);
-                const url = condition.querySelector(`#url${index + 1}`).value;
+                const urlElement = condition.querySelector(`#url${index + 1}`);
 
-                const startTime = new Date(startTimeInput.value);
-                const endTime = new Date(endTimeInput.value);
+                // 將 userType 和 color 轉換為整數
+                const userType = parseInt(userTypeElement.value, 10);
+                const text = textElement.value;
+                const color = parseInt(colorElement.value, 10);
+                const url = urlElement.value;
 
-                if (startTime > endTime) {
-                    isValid = false;
-                    startTimeInput.classList.add('error');
-                    endTimeInput.classList.add('error');
-                } else {
-                    startTimeInput.classList.remove('error');
-                    endTimeInput.classList.remove('error');
+                // 檢查時間
+                if (startTimeInput.value && endTimeInput.value) {
+                    const startTime = new Date(startTimeInput.value);
+                    const endTime = new Date(endTimeInput.value);
+
+                    if (startTime > endTime) {
+                        isValid = false;
+                        startTimeInput.classList.add('error');
+                        endTimeInput.classList.add('error');
+                    } else {
+                        startTimeInput.classList.remove('error');
+                        endTimeInput.classList.remove('error');
+                    }
                 }
 
-                return { userType, text, color, startTime: startTimeInput.value, endTime: endTimeInput.value, url };
+                return {
+                    userType,
+                    text,
+                    color,
+                    startTime: startTimeInput.value,
+                    endTime: endTimeInput.value,
+                    url
+                };
             });
 
             if (!isValid) {
-                timeErrorModal.style.display = 'block';
+                timeErrorModal.style.display = 'flex';  // 使用 flex 而不是 block
                 return;
             }
 
@@ -428,7 +511,7 @@
             deleteWarningModal.style.display = 'none';
         });
 
-        document.getElementById('clearButton').addEventListener('click', function() {
+        document.getElementById('clearButton').addEventListener('click', function () {
             Array.from(conditionsContainer.children).forEach(condition => {
                 // 清除所有 <textarea>
                 condition.querySelectorAll('textarea').forEach(textarea => {
@@ -472,4 +555,5 @@
         createCondition();
     </script>
 </body>
+
 </html>
