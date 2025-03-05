@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login.zip 產生器</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --border-color: #404040;
+            --accent-color: #9A85FF;
+            --error-color: #ff0000;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+        }
+        h2::after {
+            content: "若有問題,請找仕祺";
+            font-size: 14px;
+            color: #aaa;
+            display: block;
+            margin-top: 5px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        .language-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .language-list label {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .language-list input[type="checkbox"] {
+            margin-right: 5px;
+            width: auto;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        .color-section {
+            margin-top: 20px;
+        }
+        .color-section p {
+            margin-bottom: 10px;
+        }
+        .color-input {
+            position: relative;
+        }
+        .color-input.error input {
+            border-color: var(--error-color);
+        }
+        .color-input .error-message {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: var(--error-color);
+            font-size: 12px;
+            display: none;
+        }
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #jsonOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            white-space: pre-wrap;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .modal p {
+            color: var(--text-primary);
+        }
+        .modal button {
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login.zip 產生器</h1>
+        <h2>用來產出 PAGEs 產品 Login.zip 的 blueprint 檔案</h2>
+        <div class="form-group">
+            <label for="version">Version:</label>
+            <input type="text" id="version" value="3.0.0">
+        </div>
+        <div class="form-group">
+            <label>Language List:</label>
+            <div class="language-list">
+                <label><input type="checkbox" value="zh-Hant"> 繁體中文</label>
+                <label><input type="checkbox" value="zh-Hans"> 簡體中文</label>
+                <label><input type="checkbox" value="en"> 英文</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="language-default">Default Language:</label>
+            <select id="language-default"></select>
+        </div>
+        <hr>
+        <div class="color-section">
+            <p>此區為設定顏色，可參考 UI 針對此產品的 Figma 內容來填寫</p>
+            <div class="form-group color-input">
+                <label for="assist-basic-background">assistBasicBackground: </label>
+                <input type="text" id="assist-basic-background" value="#141414">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="assist-basic-background2">assistBasicBackground2: </label>
+                <input type="text" id="assist-basic-background2" value="#212121">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="assist-basic-line">assistBasicLine: </label>
+                <input type="text" id="assist-basic-line" value="#2F2F2F">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="assist-basic-line2">assistBasicLine2: </label>
+                <input type="text" id="assist-basic-line2" value="#595959">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="assist-basic-secondary">assistBasicSecondary: </label>
+                <input type="text" id="assist-basic-secondary" value="#7A7A7A">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="assist-basic-secondary2">assistBasicSecondary2: </label>
+                <input type="text" id="assist-basic-secondary2" value="#ABABAB">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="primary">primary: </label>
+                <input type="text" id="primary" value="#9A85FF">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="primary-gradient-start">primaryGradientStart: </label>
+                <input type="text" id="primary-gradient-start" value="#9A85FF">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+            <div class="form-group color-input">
+                <label for="primary-gradient-end">primaryGradientEnd: </label>
+                <input type="text" id="primary-gradient-end" value="#6444FF">
+                <div class="error-message">顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</div>
+            </div>
+        </div>
+        <button id="generateButton" onclick="generateJSON()">生成 JSON</button>
+        <pre id="jsonOutput"></pre>
+    </div>
+    <div id="errorModal" class="modal-overlay">
+        <div class="modal">
+            <p>版本號格式錯誤,請輸入 3 個數字組成的版本號,例如 3.2.0。</p>
+            <button onclick="closeModal()">我知道了</button>
+        </div>
+    </div>
+    <div id="colorModal" class="modal-overlay">
+        <div class="modal">
+            <p>顏色格式錯誤,請輸入以 '#' 開頭的六碼十六進制顏色值。</p>
+            <button onclick="closeModal()">我知道了</button>
+        </div>
+    </div>
+    <script>
+        const generateButton = document.getElementById('generateButton');
+        const errorModal = document.getElementById('errorModal');
+        const colorModal = document.getElementById('colorModal');
+        const colorInputs = document.querySelectorAll('.color-input');
+
+        function validateVersion() {
+            const versionInput = document.getElementById('version');
+            const versionRegex = /^\d+\.\d+\.\d+$/;
+            if (!versionRegex.test(versionInput.value)) {
+                errorModal.style.display = 'flex';
+                generateButton.classList.add('disabled');
+                return false;
+            } else {
+                errorModal.style.display = 'none';
+                generateButton.classList.remove('disabled');
+                return true;
+            }
+        }
+
+        function validateColor(colorInput) {
+            const colorRegex = /^#([A-Fa-f0-9]{6})$/;
+            return colorRegex.test(colorInput);
+        }
+
+        function populateLanguageOptions() {
+            const languageCheckboxes = document.querySelectorAll('.language-list input[type="checkbox"]');
+            const languageDefault = document.getElementById('language-default');
+
+            languageCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const selectedOptions = Array.from(languageCheckboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+                    languageDefault.innerHTML = '';
+                    selectedOptions.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.text = option === 'zh-Hant' ? '繁體中文' : option === 'zh-Hans' ? '簡體中文' : '英文';
+                        languageDefault.add(optionElement);
+                    });
+                });
+            });
+        }
+
+        function closeModal() {
+            errorModal.style.display = 'none';
+            colorModal.style.display = 'none';
+        }
+
+        function generateJSON() {
+            if (!validateVersion()) return;
+
+            const version = document.getElementById('version').value;
+            const languageCheckboxes = document.querySelectorAll('.language-list input[type="checkbox"]');
+            const languageList = Array.from(languageCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            const languageDefault = document.getElementById('language-default').value;
+            const assistBasicBackground = document.getElementById('assist-basic-background').value;
+            const assistBasicBackground2 = document.getElementById('assist-basic-background2').value;
+            const assistBasicLine = document.getElementById('assist-basic-line').value;
+            const assistBasicLine2 = document.getElementById('assist-basic-line2').value;
+            const assistBasicSecondary = document.getElementById('assist-basic-secondary').value;
+            const assistBasicSecondary2 = document.getElementById('assist-basic-secondary2').value;
+            const primary = document.getElementById('primary').value;
+            const primaryGradientStart = document.getElementById('primary-gradient-start').value;
+            const primaryGradientEnd = document.getElementById('primary-gradient-end').value;
+
+            let hasError = false;
+            colorInputs.forEach(input => {
+                const colorValue = input.querySelector('input').value;
+                if (!validateColor(colorValue)) {
+                    input.classList.add('error');
+                    input.querySelector('.error-message').style.display = 'block';
+                    hasError = true;
+                } else {
+                    input.classList.remove('error');
+                    input.querySelector('.error-message').style.display = 'none';
+                }
+            });
+
+            if (hasError) {
+                colorModal.style.display = 'flex';
+                return;
+            }
+
+            const json = {
+                "version": version,
+                "appInfo": {
+                    "language": {
+                        "list": languageList,
+                        "default": languageDefault
+                    }
+                },
+                "theme": {
+                    "assistBasicBackground": assistBasicBackground,
+                    "assistBasicBackground2": assistBasicBackground2,
+                    "assistBasicLine": assistBasicLine,
+                    "assistBasicLine2": assistBasicLine2,
+                    "assistBasicSecondary": assistBasicSecondary,
+                    "assistBasicSecondary2": assistBasicSecondary2,
+                    "primary": primary,
+                    "primaryGradientStart": primaryGradientStart,
+                    "primaryGradientEnd": primaryGradientEnd
+                },
+                "initiateTree": "10001000",
+                "pages": [
+                    {
+                        "uuid": "10001000",
+                        "eventId": "10001000",
+                        "name": "登入頁",
+                        "style": {
+                            "loginButtonBackgroundColor": "primary",
+                            "loginButtonTextColor": "basicText2",
+                            "guestTextColor": "basicText"
+                        },
+                        "parameters": {
+                            "backgroundImage": "login_background",
+                            "logoImage": "login_logo_icon",
+                            "displayLoginButtonText": "{{displayLoginButtonText}}",
+                            "displayGuestText": "{{displayGuestText}}"
+                        }
+                    }
+                ]
+            };
+
+            document.getElementById('jsonOutput').textContent = JSON.stringify(json, null, 2);
+        }
+
+        populateLanguageOptions();
+    </script>
+</body>
+</html>
